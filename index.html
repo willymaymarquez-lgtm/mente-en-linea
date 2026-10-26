@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mente en Línea - Guía Psicosocial Interactiva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366F1;
+            --primary-dark: #4338CA;
+            --primary-light: #818CF8;
+            --secondary: #06B6D4;
+            --dark: #0F172A;
+            --light-bg: #F8FAFC;
+            --white: #FFFFFF;
+            --radius: 18px;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(99, 102, 241, 0.12);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+
+        body {
+            background: linear-gradient(135deg, #F1F5F9 0%, #E2E8F0 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: var(--dark);
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--light-bg);
+        }
+
+        header {
+            background: linear-gradient(135deg, #1E1B4B 0%, #312E81 100%);
+            color: var(--white);
+            padding: 18px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(30, 27, 75, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+
+        .header-title h1 { 
+            font-size: 1.35rem; 
+            font-weight: 800; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            color: #C7D2FE; 
+        }
+        .header-title p { font-size: 0.75rem; opacity: 0.8; font-weight: 300; }
+
+        .audio-player-btn {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        .audio-player-btn:hover { background: white; color: var(--primary-dark); }
+
+        nav.tabs-nav {
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            overflow-x: auto;
+            border-bottom: 1px solid #E2E8F0;
+            padding: 0 15px;
+            position: sticky;
+            top: 67px;
+            z-index: 99;
+            width: 100%;
+            -webkit-overflow-scrolling: touch;
+        }
+        nav.tabs-nav::-webkit-scrollbar { display: none; }
+
+        .tab-btn {
+            padding: 16px 18px;
+            background: none;
+            border: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #64748B;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+        .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 700; }
+
+        .main-content {
+            flex: 1;
+            width: 100%;
+            max-width: 1250px;
+            margin: 0 auto;
+            padding: 25px 20px;
+        }
+
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; animation: fadeInUp 0.4s ease; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero Banner con Iluminación Ilustrada */
+        .hero-banner {
+            background: linear-gradient(135deg, #EEF2FF 0%, #FFFFFF 100%);
+            padding: 35px 25px;
+            border-radius: var(--radius);
+            border: 1px solid #C7D2FE;
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            gap: 25px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media(min-width: 768px) {
+            .hero-banner { flex-direction: row; padding: 50px; }
+        }
+
+        .hero-text { flex: 1; z-index: 2; }
+
+        .hero-illustration {
+            width: 220px;
+            height: 220px;
+            animation: float 4s ease-in-out infinite;
+            filter: drop-shadow(0 12px 20px rgba(99, 102, 241, 0.25));
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .badge-tag {
+            background: #E0E7FF;
+            color: var(--primary-dark);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .hero-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1E293B;
+            line-height: 1.2;
+            margin-bottom: 15px;
+        }
+        .hero-title span { color: var(--primary); }
+
+        .hero-desc {
+            font-size: 0.98rem;
+            color: #475569;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 100%;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        @media(min-width: 768px) {
+            .grid-2 { grid-template-columns: repeat(2, 1fr); gap: 25px; }
+        }
+
+        /* Tarjeta con Arte Ilustrado en Cabecera */
+        .card {
+            background: var(--white);
+            padding: 28px;
+            border-radius: var(--radius);
+            border: 1px solid #E2E8F0;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: #C7D2FE; }
+
+        .card-header-art {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .card-icon-illustration {
+            width: 70px;
+            height: 70px;
+            flex-shrink: 0;
+        }
+
+        .btn-main {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            border: none;
+            padding: 13px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            transition: all 0.3s;
+        }
+        .btn-main:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(99, 102, 241, 0.4); }
+
+        /* Sopa de Letras e Ilustración Integrada */
+        .wordsearch-container {
+            text-align: center;
+            width: 100%;
+            max-width: 650px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 30px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid #E2E8F0;
+        }
+        .wordsearch-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 6px;
+            margin: 20px 0;
+        }
+        .ws-cell {
+            background: #EEF2FF;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--primary-dark);
+            border: 1px solid #C7D2FE;
+            transition: all 0.2s;
+        }
+        .ws-cell.selected { background: var(--primary); color: white; transform: scale(1.05); }
+
+        .word-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        .word-item {
+            background: #F1F5F9;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #475569;
+            border: 1px solid #E2E8F0;
+        }
+        .word-item.found { background: #10B981; color: white; text-decoration: line-through; }
+
+        .congrats-msg {
+            display: none;
+            background: #D1FAE5;
+            color: #065F46;
+            padding: 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            margin-top: 15px;
+        }
+
+        .video-box {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 16px;
+            background: #000;
+            margin-top: 15px;
+            border: 3px solid #E2E8F0;
+        }
+        .video-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+        .certificate-card {
+            background: var(--white);
+            border: 6px double var(--primary);
+            padding: 35px 20px;
+            text-align: center;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            margin-top: 25px;
+            display: none;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid #CBD5E1;
+            margin-top: 8px;
+            margin-bottom: 18px;
+            font-size: 0.95rem;
+            background: #F8FAFC;
+        }
+
+        footer {
+            background: #1E1B4B;
+            color: #94A3B8;
+            padding: 22px;
+            text-align: center;
+            font-size: 0.82rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <header>
+            <div class="header-title">
+                <h1><i class="fa-solid fa-brain"></i> Mente en Línea</h1>
+                <p>Plataforma de Salud y Convivencia Digital</p>
+            </div>
+            <button class="audio-player-btn" onclick="toggleAmbientAudio()">
+                <i id="audio-icon" class="fa-solid fa-music"></i> <span id="audio-status">Música: OFF</span>
+            </button>
+        </header>
+
+        <audio id="bg-music" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3"></audio>
+
+        <nav class="tabs-nav">
+            <button class="tab-btn active" onclick="switchTab('tab-inicio', this)"><i class="fa-solid fa-house"></i> Inicio</button>
+            <button class="tab-btn" onclick="switchTab('tab-salud', this)"><i class="fa-solid fa-heart-pulse"></i> Salud</button>
+            <button class="tab-btn" onclick="switchTab('tab-cuentos', this)"><i class="fa-solid fa-book-open-reader"></i> Cuentos</button>
+            <button class="tab-btn" onclick="switchTab('tab-sopa', this)"><i class="fa-solid fa-gamepad"></i> Juego</button>
+            <button class="tab-btn" onclick="switchTab('tab-cinema', this)"><i class="fa-solid fa-film"></i> Cinema</button>
+            <button class="tab-btn" onclick="switchTab('tab-pase', this)"><i class="fa-solid fa-award"></i> Pase</button>
+            <button class="tab-btn" onclick="switchTab('tab-encuesta', this)"><i class="fa-solid fa-pen-to-square"></i> Encuesta</button>
+        </nav>
+
+        <div class="main-content">
+            <!-- INICIO -->
+            <div id="tab-inicio" class="tab-panel active">
+                <div class="hero-banner">
+                    <div class="hero-text">
+                        <div class="badge-tag"><i class="fa-solid fa-sparkles"></i> Tu Espacio de Bienestar Digital</div>
+                        <h2 class="hero-title">Guía Psicosocial para el <span>Uso Saludable del Móvil</span></h2>
+                        <p class="hero-desc">Bienvenido a <strong>Mente en Línea</strong>, una herramienta interactiva diseñada para ayudarte a transformar la tecnología en tu aliada cotidiana sin descuidar tu salud mental y tus relaciones de amistad.</p>
+                        <button class="btn-main" onclick="switchTab('tab-salud', document.querySelectorAll('.tab-btn')[1])">
+                            Comenzar Exploración <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <!-- Dibujo Animado Móvil -->
+                    <svg class="hero-illustration" viewBox="0 0 200 200" fill="none">
+                        <circle cx="100" cy="100" r="85" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="3"/>
+                        <rect x="65" y="35" width="70" height="130" rx="16" fill="#6366F1"/>
+                        <rect x="72" y="45" width="56" height="98" rx="8" fill="#FFFFFF"/>
+                        <circle cx="100" cy="152" r="4" fill="#E0E7FF"/>
+                        <!-- Carita Sonriente -->
+                        <circle cx="90" cy="85" r="5" fill="#4338CA"/>
+                        <circle cx="110" cy="85" r="5" fill="#4338CA"/>
+                        <path d="M88 102 Q100 114 112 102" stroke="#4338CA" stroke-width="3.5" stroke-linecap="round"/>
+                        <!-- Elementos Flotantes Alrededor -->
+                        <circle cx="45" cy="60" r="10" fill="#06B6D4" opacity="0.8"/>
+                        <circle cx="155" cy="140" r="8" fill="#818CF8" opacity="0.8"/>
+                        <path d="M150 50 L160 60 L140 60 Z" fill="#F59E0B" opacity="0.7"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- SALUD DIGITAL -->
+            <div id="tab-salud" class="tab-panel">
+                <h2 style="color: var(--dark); margin-bottom: 20px; font-size: 1.8rem; font-weight: 800;">Mente en Línea: Hábitos Saludables</h2>
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header-art">
+                            <h3 style="color:var(--primary); font-size: 1.25rem; font-weight: 700;"><i class="fa-solid fa-bell-slash"></i> Gestión de Alertas</h3>
+                            <!-- Dibujo Notificaciones -->
+                            <svg class="card-icon-illustration" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="40" fill="#EEF2FF"/>
+                                <path d="M50 25 C40 25 35 35 35 45 L35 55 L30 60 L70 60 L65 55 L65 45 C65 35 60 25 50 25 Z" fill="#6366F1"/>
+                                <circle cx="50" cy="68" r="5" fill="#4338CA"/>
+                                <line x1="25" y1="25" x2="75" y2="75" stroke="#EF4444" stroke-width="5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <p style="font-size:0.95rem; color:#64748B; line-height: 1.6;">Aprende a desactivar las notificaciones no prioritarias. Tu atención es valiosa y no debe ser interrumpida constantemente por distracciones digitales.</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header-art">
+                            <h3 style="color:var(--secondary); font-size: 1.25rem; font-weight: 700;"><i class="fa-solid fa-moon"></i> Desconexión Nocturna</h3>
+                            <!-- Dibujo Luna y Sueño -->
+                            <svg class="card-icon-illustration" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="40" fill="#ECFEFF"/>
+                                <path d="M60 30 C42 30 30 42 30 60 C30 72 38 80 50 80 C38 75 35 58 45 42 C52 32 62 30 60 30 Z" fill="#06B6D4"/>
+                                <path d="M65 35 L68 40 L73 40 L69 43 L71 48 L65 45 L60 48 L62 43 L58 40 L63 40 Z" fill="#F59E0B"/>
+                            </svg>
+                        </div>
+                        <p style="font-size:0.95rem; color:#64748B; line-height: 1.6;">Establece un límite diario. Apagar las pantallas 30 minutos antes de dormir mejora considerablemente tu descanso mental y la calidad de tu sueño.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CUENTOS Y LIBROS -->
+            <div id="tab-cuentos" class="tab-panel">
+                <h2 style="color: var(--dark); margin-bottom: 20px; font-size: 1.8rem; font-weight: 800;">📖 Cuentos y Lecturas Juveniles</h2>
+                
+                <div class="card">
+                    <div class="card-header-art">
+                        <h3 style="color:var(--primary); font-size: 1.3rem; font-weight: 700;">1. El Grupo del Sticker Prohibido (~3 min)</h3>
+                        <!-- Dibujo Libro Abierto -->
+                        <svg class="card-icon-illustration" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" fill="#EEF2FF"/>
+                            <path d="M25 40 Q50 30 50 65 Q35 60 25 65 Z" fill="#6366F1"/>
+                            <path d="M75 40 Q50 30 50 65 Q65 60 75 65 Z" fill="#818CF8"/>
+                        </svg>
+                    </div>
+                    <p style="font-size:0.98rem; color:#475569; margin:15px 0; line-height:1.7;" id="story-text">
+                        A las nueve de la noche, el teléfono de Mateo comenzó a vibrar sin parar. En el grupo de WhatsApp del salón, alguien había enviado una fotografía modificada de un compañero, acompañada de burlas. En cuestión de minutos, los mensajes y emojis de risa se multiplicaron. Mateo sintió un nudo en el estómago; sabía que compartir esa imagen no estaba bien y que su compañero la estaba pasando mal.
+                        <br><br>
+                        Recordó lo conversado en la guía de Mente en Línea: "Lo que ocurre en la pantalla tiene un impacto directo en la vida real". En lugar de unirse a la burla o reenviar la imagen a otros chats, Mateo decidió no reaccionar. Escribió en privado a su compañero para ofrecerle su apoyo sincero y luego le sugirió al administrador del grupo que borrara el sticker. Al día siguiente en el colegio, el ambiente era distinto porque Mateo y otros amigos decidieron poner un límite con empatía y respeto.
+                    </p>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <button class="btn-main" onclick="readStory()"><i class="fa-solid fa-volume-high"></i> Escuchar Cuento (Voz)</button>
+                        <button class="btn-main" style="background:#64748B;" onclick="stopStory()"><i class="fa-solid fa-stop"></i> Detener</button>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header-art">
+                            <h3 style="color:var(--secondary); font-size: 1.2rem; font-weight: 700;">2. "El Principito"</h3>
+                            <!-- Dibujo Estrella/Planeta -->
+                            <svg class="card-icon-illustration" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="40" fill="#FEF3C7"/>
+                                <path d="M50 20 L58 38 L78 38 L62 50 L68 68 L50 56 L32 68 L38 50 L22 38 L42 38 Z" fill="#F59E0B"/>
+                            </svg>
+                        </div>
+                        <p style="font-size:0.92rem; color:#555; margin-bottom: 15px; line-height: 1.6;">
+                            Una obra magistral que nos enseña que "lo esencial es invisible a los ojos". Invita a reflexionar sobre los lazos afectivos reales y la empatía.
+                        </p>
+                        <a href="https://web.seducoahuila.gob.mx/biblioweb/upload/el%20principito.pdf" target="_blank" class="btn-main" style="background:var(--secondary);">
+                            <i class="fa-solid fa-file-pdf"></i> Leer Libro Completo (PDF)
+                        </a>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header-art">
+                            <h3 style="color:var(--primary-dark); font-size: 1.2rem; font-weight: 700;">3. "La culpa es de la vaca"</h3>
+                            <!-- Dibujo Hoja / Crecimiento -->
+                            <svg class="card-icon-illustration" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="40" fill="#D1FAE5"/>
+                                <path d="M50 70 Q30 50 50 25 Q70 50 50 70 Z" fill="#10B981"/>
+                                <line x1="50" y1="70" x2="50" y2="35" stroke="#047857" stroke-width="3"/>
+                            </svg>
+                        </div>
+                        <p style="font-size:0.92rem; color:#555; margin-bottom: 15px; line-height: 1.6;">
+                            Una célebre colección de historias sobre la responsabilidad individual, la convivencia pacífica y la toma de decisiones conscientes.
+                        </p>
+                        <a href="https://tavapy.gov.py/biblioteca/wp-content/uploads/2023/02/LoperaJ-La-culpa-es-de-la-vaca.pdf" target="_blank" class="btn-main">
+                            <i class="fa-solid fa-file-pdf"></i> Leer Libro Completo (PDF)
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SOPA DE LETRAS -->
+            <div id="tab-sopa" class="tab-panel">
+                <div class="wordsearch-container">
+                    <!-- Dibujo Puzle -->
+                    <svg style="width: 80px; height: 80px; margin-bottom: 10px;" viewBox="0 0 100 100">
+                        <rect x="20" y="20" width="60" height="60" rx="12" fill="#E0E7FF" stroke="#6366F1" stroke-width="4"/>
+                        <path d="M40 20 A10 10 0 0 1 60 20" fill="#6366F1"/>
+                        <path d="M80 40 A10 10 0 0 1 80 60" fill="#6366F1"/>
+                    </svg>
+                    <h2 style="color: var(--dark); margin-bottom: 5px; font-size: 1.8rem; font-weight: 800;">🔠 Sopa de Letras Avanzada</h2>
+                    <p style="font-size:0.92rem; color:#64748B;">Encuentra las 6 palabras clave haciendo clic sobre las letras:</p>
+                    
+                    <div class="word-list">
+                        <span class="word-item" id="w-salud">SALUD</span>
+                        <span class="word-item" id="w-empatia">EMPATIA</span>
+                        <span class="word-item" id="w-redes">REDES</span>
+                        <span class="word-item" id="w-limite">LIMITE</span>
+                        <span class="word-item" id="w-paz">PAZ</span>
+                        <span class="word-item" id="w-respeto">RESPETO</span>
+                    </div>
+
+                    <div class="wordsearch-grid" id="ws-grid">
+                        <div class="ws-cell" onclick="toggleCell(this)">S</div><div class="ws-cell" onclick="toggleCell(this)">A</div><div class="ws-cell" onclick="toggleCell(this)">L</div><div class="ws-cell" onclick="toggleCell(this)">U</div><div class="ws-cell" onclick="toggleCell(this)">D</div><div class="ws-cell" onclick="toggleCell(this)">X</div><div class="ws-cell" onclick="toggleCell(this)">P</div><div class="ws-cell" onclick="toggleCell(this)">A</div><div class="ws-cell" onclick="toggleCell(this)">Z</div><div class="ws-cell" onclick="toggleCell(this)">O</div>
+                        <div class="ws-cell" onclick="toggleCell(this)">M</div><div class="ws-cell" onclick="toggleCell(this)">E</div><div class="ws-cell" onclick="toggleCell(this)">M</div><div class="ws-cell" onclick="toggleCell(this)">P</div><div class="ws-cell" onclick="toggleCell(this)">A</div><div class="ws-cell" onclick="toggleCell(this)">T</div><div class="ws-cell" onclick="toggleCell(this)">I</div><div class="ws-cell" onclick="toggleCell(this)">A</div><div class="ws-cell" onclick="toggleCell(this)">K</div><div class="ws-cell" onclick="toggleCell(this)">L</div>
+                        <div class="ws-cell" onclick="toggleCell(this)">B</div><div class="ws-cell" onclick="toggleCell(this)">R</div><div class="ws-cell" onclick="toggleCell(this)">E</div><div class="ws-cell" onclick="toggleCell(this)">D</div><div class="ws-cell" onclick="toggleCell(this)">E</div><div class="ws-cell" onclick="toggleCell(this)">S</div><div class="ws-cell" onclick="toggleCell(this)">W</div><div class="ws-cell" onclick="toggleCell(this)">Q</div><div class="ws-cell" onclick="toggleCell(this)">R</div><div class="ws-cell" onclick="toggleCell(this)">V</div>
+                        <div class="ws-cell" onclick="toggleCell(this)">L</div><div class="ws-cell" onclick="toggleCell(this)">I</div><div class="ws-cell" onclick="toggleCell(this)">M</div><div class="ws-cell" onclick="toggleCell(this)">I</div><div class="ws-cell" onclick="toggleCell(this)">T</div><div class="ws-cell" onclick="toggleCell(this)">E</div><div class="ws-cell" onclick="toggleCell(this)">N</div><div class="ws-cell" onclick="toggleCell(this)">M</div><div class="ws-cell" onclick="toggleCell(this)">E</div><div class="ws-cell" onclick="toggleCell(this)">I</div>
+                        <div class="ws-cell" onclick="toggleCell(this)">R</div><div class="ws-cell" onclick="toggleCell(this)">E</div><div class="ws-cell" onclick="toggleCell(this)">S</div><div class="ws-cell" onclick="toggleCell(this)">P</div><div class="ws-cell" onclick="toggleCell(this)">E</div><div class="ws-cell" onclick="toggleCell(this)">T</div><div class="ws-cell" onclick="toggleCell(this)">O</div><div class="ws-cell" onclick="toggleCell(this)">U</div><div class="ws-cell" onclick="toggleCell(this)">S</div><div class="ws-cell" onclick="toggleCell(this)">A</div>
+                        <div class="ws-cell" onclick="toggleCell(this)">A</div><div class="ws-cell" onclick="toggleCell(this)">C</div><div class="ws-cell" onclick="toggleCell(this)">V</div><div class="ws-cell" onclick="toggleCell(this)">B</div><div class="ws-cell" onclick="toggleCell(this)">N</div><div class="ws-cell" onclick="toggleCell(this)">M</div><div class="ws-cell" onclick="toggleCell(this)">K</div><div class="ws-cell" onclick="toggleCell(this)">L</div><div class="ws-cell" onclick="toggleCell(this)">O</div><div class="ws-cell" onclick="toggleCell(this)">P</div>
+                        <div class="ws-cell" onclick="toggleCell(this)">Q</div><div class="ws-cell" onclick="toggleCell(this)">W</div><div class="ws-cell" onclick="toggleCell(this)">E</div><div class="ws-cell" onclick="toggleCell(this)">R</div><div class="ws-cell" onclick="toggleCell(this)">T</div><div class="ws-cell" onclick="toggleCell(this)">Y</div><div class="ws-cell" onclick="toggleCell(this)">U</div><div class="ws-cell" onclick="toggleCell(this)">I</div><div class="ws-cell" onclick="toggleCell(this)">O</div><div class="ws-cell" onclick="toggleCell(this)">P</div>
+                        <div class="ws-cell" onclick="toggleCell(this)">Z</div><div class="ws-cell" onclick="toggleCell(this)">X</div><div class="ws-cell" onclick="toggleCell(this)">C</div><div class="ws-cell" onclick="toggleCell(this)">V</div><div class="ws-cell" onclick="toggleCell(this)">B</div><div class="ws-cell" onclick="toggleCell(this)">N</div><div class="ws-cell" onclick="toggleCell(this)">M</div><div class="ws-cell" onclick="toggleCell(this)">A</div><div class="ws-cell" onclick="toggleCell(this)">S</div><div class="ws-cell" onclick="toggleCell(this)">D</div>
+                        <div class="ws-cell" onclick="toggleCell(this)">F</div><div class="ws-cell" onclick="toggleCell(this)">G</div><div class="ws-cell" onclick="toggleCell(this)">H</div><div class="ws-cell" onclick="toggleCell(this)">J</div><div class="ws-cell" onclick="toggleCell(this)">K</div><div class="ws-cell" onclick="toggleCell(this)">L</div><div class="ws-cell" onclick="toggleCell(this)">P</div><div class="ws-cell" onclick="toggleCell(this)">O</div><div class="ws-cell" onclick="toggleCell(this)">I</div><div class="ws-cell" onclick="toggleCell(this)">U</div>
+                        <div class="ws-cell" onclick="toggleCell(this)">Y</div><div class="ws-cell" onclick="toggleCell(this)">T</div><div class="ws-cell" onclick="toggleCell(this)">R</div><div class="ws-cell" onclick="toggleCell(this)">E</div><div class="ws-cell" onclick="toggleCell(this)">W</div><div class="ws-cell" onclick="toggleCell(this)">Q</div><div class="ws-cell" onclick="toggleCell(this)">A</div><div class="ws-cell" onclick="toggleCell(this)">S</div><div class="ws-cell" onclick="toggleCell(this)">D</div><div class="ws-cell" onclick="toggleCell(this)">F</div>
+                    </div>
+
+                    <div id="congrats-box" class="congrats-msg">
+                        🎉 ¡Increíble! Has completado la sopa de letras con éxito. ¡Felicitaciones!
+                    </div>
+                </div>
+            </div>
+
+            <!-- CINEMA -->
+            <div id="tab-cinema" class="tab-panel">
+                <h2 style="color: var(--dark); margin-bottom: 5px; font-size: 1.8rem; font-weight: 800;">🎬 Cinema Psicosocial</h2>
+                <p style="color: #64748B; font-size: 0.95rem; margin-bottom: 20px;">Cortometraje educativo sobre la concientización del uso del móvil:</p>
+                <div class="card" style="padding: 20px; max-width: 900px; margin: 0 auto;">
+                    <div class="video-box">
+                        <iframe src="https://www.youtube-nocookie.com/embed/s3wcw9Eg5Fw" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASE DIGITAL -->
+            <div id="tab-pase" class="tab-panel">
+                <div style="max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: var(--dark); margin-bottom: 15px; font-size: 1.8rem; font-weight: 800; text-align: center;">🏆 Pase Digital de Compromiso</h2>
+                    <div class="card">
+                        <label style="font-size:0.95rem; font-weight:600; display: block; margin-bottom: 8px;">Escribe tu Nombre y Apellido:</label>
+                        <input type="text" id="student-name" placeholder="Tu nombre aquí...">
+                        <button class="btn-main" onclick="generatePass()" style="width: 100%;">Generar Pase Mente en Línea <i class="fa-solid fa-award"></i></button>
+                    </div>
+                    <div id="certificate" class="certificate-card">
+                        <!-- Dibujo Medalla -->
+                        <svg style="width: 80px; height: 80px; margin-bottom: 10px;" viewBox="0 0 100 100">
+                            <circle cx="50" cy="45" r="30" fill="#F59E0B"/>
+                            <circle cx="50" cy="45" r="22" fill="#FEF3C7"/>
+                            <path d="M38 70 L30 95 L50 85 L70 95 L62 70 Z" fill="#EF4444"/>
+                        </svg>
+                        <h3 style="color:var(--primary-dark); font-size: 1.6rem; font-weight: 800;">PASE DE COMPROMISO DIGITAL</h3>
+                        <p style="font-size:0.9rem; color:#666; margin-top: 8px;">Otorgado a:</p>
+                        <h2 id="cert-name" style="color:var(--dark); margin:12px 0; font-size: 1.8rem; font-weight: 800;">Estudiante</h2>
+                        <p style="font-size:0.95rem; color:#333; line-height: 1.6;">Por promover un uso empático, consciente y saludable de las tecnologías digitales.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ENCUESTA -->
+            <div id="tab-encuesta" class="tab-panel">
+                <div style="max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: var(--dark); margin-bottom: 15px; font-size: 1.8rem; font-weight: 800; text-align: center;">📝 Encuesta de Retroalimentación</h2>
+                    <div class="card">
+                        <form onsubmit="alert('¡Gracias por enviar tus respuestas a Mente en Línea!'); return false;">
+                            <label style="font-size:0.95rem; font-weight:600; display:block; margin-bottom:10px;">¿Qué te pareció la experiencia interactiva de Mente en Línea?</label>
+                            <select>
+                                <option>¡Excelente, muy reflexiva e interactiva!</option>
+                                <option>Me pareció muy instructiva y entretenida</option>
+                                <option>Muy buena para aprender a cuidar mi tiempo</option>
+                            </select>
+                            <button type="submit" class="btn-main" style="width: 100%;"><i class="fa-solid fa-paper-plane"></i> Enviar Respuesta</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            Mente en Línea • Investigación Psicosocial para el Uso Saludable de la Tecnología
+        </footer>
+    </div>
+
+    <script>
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        let isAudioPlaying = false;
+        function toggleAmbientAudio() {
+            const audio = document.getElementById('bg-music');
+            const status = document.getElementById('audio-status');
+            if (isAudioPlaying) {
+                audio.pause();
+                status.innerText = "Música: OFF";
+            } else {
+                audio.play();
+                status.innerText = "Música: ON 🎵";
+            }
+            isAudioPlaying = !isAudioPlaying;
+        }
+
+        function readStory() {
+            window.speechSynthesis.cancel();
+            const text = document.getElementById('story-text').innerText;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'es-ES';
+            utterance.rate = 0.92;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function stopStory() { window.speechSynthesis.cancel(); }
+
+        function toggleCell(cell) {
+            cell.classList.toggle('selected');
+            const selected = document.querySelectorAll('.ws-cell.selected');
+            
+            if (selected.length >= 5) document.getElementById('w-salud').classList.add('found');
+            if (selected.length >= 10) document.getElementById('w-empatia').classList.add('found');
+            if (selected.length >= 15) document.getElementById('w-redes').classList.add('found');
+            if (selected.length >= 20) document.getElementById('w-limite').classList.add('found');
+            if (selected.length >= 23) document.getElementById('w-paz').classList.add('found');
+            if (selected.length >= 28) {
+                document.getElementById('w-respeto').classList.add('found');
+                document.getElementById('congrats-box').style.display = 'block';
+            }
+        }
+
+        function generatePass() {
+            const name = document.getElementById('student-name').value.trim();
+            if (!name) { alert("Por favor ingresa tu nombre."); return; }
+            document.getElementById('cert-name').innerText = name;
+            document.getElementById('certificate').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
